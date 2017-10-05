@@ -1,0 +1,51 @@
+version: '3'
+services:
+
+  db:
+    image: mysql:5.7
+    container_name: devspace-db
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: devspaceint
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+    # volumes:
+      # - ./db-dump:/docker-entrypoint-initdb.d
+
+  drupal:
+    build: drupal
+    image: ipeinado/devspace-drupal:v0.0
+    container_name: devspace-drupal
+    # volumes:
+      # - ./site:/var/www/html
+    links:
+      - db
+    ports:
+      - "8888:80"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - db
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_ARBITRARY=1
+
+  # solr:
+    # image: solr:5 # drupal V7 only supports v5
+    # container_name: devspace-solr
+    # links: 
+      # - db
+    # ports: 
+      # - "8983:8983"
+    # entrypoint:
+      # - docker-entrypoint.sh
+      # - solr-precreate
+      # - gpii-dspace
+    # volumes:
+      # - ./site/gpii.net/web/sites/all/modules/search_api_solr/solr-conf/5.x:/opt/solr/server/gpii-dspace
