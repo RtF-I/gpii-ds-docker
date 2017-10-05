@@ -1,0 +1,3 @@
+[submodule "site/gpii.net"]
+	path = site/gpii.net
+	url = https://github.com/Pushing7/gpii.net.git
