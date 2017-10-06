@@ -12,17 +12,19 @@ services:
       MYSQL_DATABASE: devspaceint
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
-    # volumes:
-      # - ./db-dump:/docker-entrypoint-initdb.d
+    volumes:
+      - ./db-dump/devspace-db-sanitized.sql.gz:/docker-entrypoint-initdb.d/devspace-db-sanitized.sql.gz
 
   drupal:
     build: drupal
     image: ipeinado/devspace-drupal:v0.0
     container_name: devspace-drupal
-    # volumes:
-      # - ./site:/var/www/html
+    volumes:
+      - ./site:/var/www/html
+      # - ./site/config/settings.php:/var/www/html/gpii.net/web/sites/developerspace.gpii.net/
     links:
-      - db
+      - db:devspace-db
+    # command: /bin/bash -c "mkdir /var/wwww/html/gpii.net/web/sites/default/ && ln -s /var/wwww/html/gpii.net/web/sites/developerspace.gpii.net /var/wwww/html/gpii.net/web/sites/default"
     ports:
       - "8888:80"
 
