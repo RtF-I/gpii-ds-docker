@@ -38,16 +38,17 @@ services:
     environment:
       - PMA_ARBITRARY=1
 
-  # solr:
-    # image: solr:5 # drupal V7 only supports v5
-    # container_name: devspace-solr
-    # links: 
-      # - db
-    # ports: 
-      # - "8983:8983"
-    # entrypoint:
-      # - docker-entrypoint.sh
-      # - solr-precreate
-      # - gpii-dspace
-    # volumes:
-      # - ./site/gpii.net/web/sites/all/modules/search_api_solr/solr-conf/5.x:/opt/solr/server/gpii-dspace
+  solr:
+    image: solr:5 # drupal V7 only supports v5
+    container_name: devspace-solr
+    links: 
+      - db
+    ports: 
+      - "8983:8983"
+    volumes:
+      - ./site/gpii.net/web/sites/all/modules/search_api_solr/solr-conf/5.x:/solr-conf/conf
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - gpii-dspace
+      - /solr-conf
