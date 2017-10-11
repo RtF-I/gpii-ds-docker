@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
 
   db:
@@ -24,6 +24,7 @@ services:
       # - ./site/config/settings.php:/var/www/html/gpii.net/web/sites/developerspace.gpii.net/
     links:
       - db:devspace-db
+      - solr:devspace-solr
     # command: /bin/bash -c "mkdir /var/wwww/html/gpii.net/web/sites/default/ && ln -s /var/wwww/html/gpii.net/web/sites/developerspace.gpii.net /var/wwww/html/gpii.net/web/sites/default"
     ports:
       - "8888:80"
@@ -39,16 +40,7 @@ services:
       - PMA_ARBITRARY=1
 
   solr:
-    image: solr:5 # drupal V7 only supports v5
+    build: solr-5.4.1/ # drupal V7 only supports v5
     container_name: devspace-solr
-    links: 
-      - db
-    ports: 
+    ports:
       - "8983:8983"
-    volumes:
-      - ./site/gpii.net/web/sites/all/modules/search_api_solr/solr-conf/5.x:/solr-conf/conf
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr-precreate
-      - gpii-dspace
-      - /solr-conf
