@@ -13,6 +13,7 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
     volumes:
+      - db-data:/var/lib/mysql
       - ./db-dump/devspace-db-sanitized.sql.gz:/docker-entrypoint-initdb.d/devspace-db-sanitized.sql.gz
 
   drupal:
@@ -40,7 +41,20 @@ services:
       - PMA_ARBITRARY=1
 
   solr:
-    build: solr-5.4.1/ # drupal V7 only supports v5
+    build: solr-5.4.1/ # drupal V7 only supports versions lower than 5.5
     container_name: devspace-solr
     ports:
       - "8983:8983"
+
+  gulp:
+    build: gulp/
+    container_name: devspace-gulp
+    links:
+      - drupal:devspace-drupal
+    volumes:
+      - ./site/gpii.net/web/sites/all/themes:/usr/src/themes
+    working_dir: /usr/src/themes/gpii_devspace
+    command: gulp
+
+volumes:
+  db-data:
