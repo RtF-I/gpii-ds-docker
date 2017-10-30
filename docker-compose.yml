@@ -54,7 +54,10 @@ services:
     volumes:
       - ./site/gpii.net/web/sites/all/themes:/usr/src/themes
     working_dir: /usr/src/themes/gpii_devspace
-    command: gulp
+    # UNCOMMENT THE ENTRY POINT THE FIRST TIME YOU BUILD AND START THE CONTAINERS
+    # entrypoint: npm install
+    command:
+      - npm install; gulp 
 
 volumes:
   db-data:
